@@ -73,6 +73,51 @@ def start(update, context):
 This bot can mirror all your links to Google Drive!
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
+        if update.message.chat.type == "private":
+            sendMessage(f"Access granted", context.bot, update)
+        else:
+            sendMessage(f"I'm alive :)", context.bot, update)
+        LOGGER.info('Granted: {} [{}]'.format(update.message.from_user.first_name, update.message.from_user.id))
+    else:
+        sendMessage(f"Access denied", context.bot, update)
+        LOGGER.info('Denied: {} [{}]'.format(update.message.from_user.first_name, update.message.from_user.id))
+
+def bot_help(update, context):
+    help_string = f'''
+<u><i><b>Usage:</b></i></u>
+
+For <i>folder</i> results only:
+<code>/{BotCommands.ListCommand} -d &lt;query&gt;</code>
+
+For <i>file</i> results only:
+<code>/{BotCommands.ListCommand} -f &lt;query&gt;</code>
+
+<u><i><b>Commands:</b></i></u>
+
+/{BotCommands.StartCommand}: Start the bot
+
+/{BotCommands.ListCommand} [query]: Search data on Drives
+
+/{BotCommands.CloneCommand} [url]: Copy data from drive/appdrive/gdtot to Drive
+
+/{BotCommands.CountCommand} [drive_url]: Count data of Drive
+
+/{BotCommands.PermissionCommand} [drive_url]: Set data permission to 'Anyone with the link' (Only owner)
+
+/{BotCommands.DeleteCommand} [drive_url]: Delete data from Drive (Only owner)
+
+/{BotCommands.AuthorizeCommand}: Authorize an user or a chat for using the bot (Only owner)
+
+/{BotCommands.UnauthorizeCommand}: Unauthorize an user or a chat for using the bot (Only owner)
+
+/{BotCommands.UsersCommand}: View authorized chats (Only owner)
+
+/{BotCommands.ShellCommand} [cmd]: Execute bash commands (Only owner)
+
+/{BotCommands.LogCommand}: Get the log file (Only owner)
+
+/{BotCommands.HelpCommand}: Get this message
+'''
         sendMarkup(start_string, context.bot, update.message, reply_markup)
     else:
         sendMarkup('Not Authorized user, deploy your own mirror-leech bot', context.bot, update.message, reply_markup)
